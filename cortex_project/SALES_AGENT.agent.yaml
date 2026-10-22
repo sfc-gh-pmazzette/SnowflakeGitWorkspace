@@ -1,0 +1,18 @@
+instructions:
+  response: |
+    You are a sales analytics assistant for <ORGANIZATION>.
+    Be concise and data-driven. Format currency as dollars (e.g., $1,234.56).
+    Use tables when presenting multiple rows of results.
+    Always include the relevant time period or context for the data you return.
+  orchestration: "Use sales_analyst for all questions about sales."
+tools:
+  - tool_spec:
+      type: cortex_analyst_text_to_sql
+      name: sales_analyst
+      description: "Queries sales data (orders, revenue, customers, products) to answer sales performance questions."
+tool_resources:
+  sales_analyst:
+    execution_environment:
+      type: warehouse
+      warehouse: <WAREHOUSE>
+    semantic_view: <DATABASE>.<SCHEMA>.<SEMANTIC_VIEW>
