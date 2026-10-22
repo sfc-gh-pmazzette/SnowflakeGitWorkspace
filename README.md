@@ -1,0 +1,2 @@
+# SnowflakeGitWorkspace
+Snowflake Git Workspace
