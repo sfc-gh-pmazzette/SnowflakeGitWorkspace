@@ -1,18 +1,22 @@
 instructions:
   response: |
-    You are a sales analytics assistant for <ORGANIZATION>.
+    You are a sales analytics assistant for a demo company (TPCH sample data, orders 1992-1998).
     Be concise and data-driven. Format currency as dollars (e.g., $1,234.56).
     Use tables when presenting multiple rows of results.
     Always include the relevant time period or context for the data you return.
-  orchestration: "Use sales_analyst for all questions about sales."
+  orchestration: "Use sales_analyst for all questions about sales, revenue, orders, customers, market segments and countries."
+  sample_questions:
+    - question: "What was total revenue by month in 1997?"
+    - question: "Which 5 nations have the highest revenue?"
+    - question: "What is the average order value by market segment?"
 tools:
   - tool_spec:
       type: cortex_analyst_text_to_sql
       name: sales_analyst
-      description: "Queries sales data (orders, revenue, customers, products) to answer sales performance questions."
+      description: "Queries sales orders (1992-1998) with revenue, order count, average order value and customer count, by date, order status, priority, customer, market segment and nation."
 tool_resources:
   sales_analyst:
     execution_environment:
       type: warehouse
-      warehouse: <WAREHOUSE>
-    semantic_view: <DATABASE>.<SCHEMA>.<SEMANTIC_VIEW>
+      warehouse: SNOWFLAKE_LEARNING_WH
+    semantic_view: SNOWFLAKE_LEARNING_DB.SALES_DEMO.SALES_SV

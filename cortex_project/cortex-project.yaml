@@ -4,4 +4,14 @@ artifacts:
     type: cortex_agent
     targets:
       default:
-        object: MY_DB.PUBLIC.SALES_AGENT
+        object: SNOWFLAKE_LEARNING_DB.SALES_DEMO.SALES_AGENT
+  - path: RETENTION_SPECIALIST_AGENT.agent.yaml
+    type: cortex_agent
+    targets:
+      default:
+        object: DEMO_DB.PUBLIC.RETENTION_SPECIALIST_AGENT
+  - path: TALENT_ACQUISITION_AGENT.agent.yaml
+    type: cortex_agent
+    targets:
+      default:
+        object: COCO_HR_ANALYTICS.PUBLIC.TALENT_ACQUISITION_AGENT

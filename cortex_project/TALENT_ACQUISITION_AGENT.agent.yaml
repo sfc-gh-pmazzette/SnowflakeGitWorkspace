@@ -1,0 +1,27 @@
+models:
+  orchestration: "claude-4-sonnet"
+instructions:
+  response: "Be concise and data-driven. Format data in tables when presenting multiple\
+    \ records."
+  orchestration: "You are a talent acquisition assistant. \n- Use recruitment_analyst\
+    \ for metrics, statistics, hire rates, pipeline data, salaries\n- Use resume_search\
+    \ for finding candidates by skills or experience\n"
+tools:
+  - tool_spec:
+      type: "cortex_analyst_text_to_sql"
+      name: "recruitment_analyst"
+      description: "Query recruitment metrics from candidate database"
+  - tool_spec:
+      type: "cortex_search"
+      name: "resume_search"
+      description: "Search candidate resumes by skills and experience"
+tool_resources:
+  recruitment_analyst:
+    semantic_model_file: "@COCO_HR_ANALYTICS.SEMANTIC_MODELS.MODELS/talent_acquisition_semantic_model.yaml"
+    execution_environment:
+      type: "warehouse"
+      warehouse: "CFT_WH"
+    query_timeout: 60
+  resume_search:
+    search_service: "COCO_HR_ANALYTICS.PUBLIC.RESUME_SEARCH"
+    max_results: 10

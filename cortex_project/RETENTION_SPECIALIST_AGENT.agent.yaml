@@ -1,0 +1,56 @@
+models:
+  orchestration: "claude-4-sonnet"
+instructions:
+  response: "Maintain a professional, empathetic tone. Use clear formatting with bullet\
+    \ points when presenting data. Always include customer verification and risk assessment.\
+    \ End high-risk cases with specific retention offers."
+  orchestration: "You are a Senior Retention Specialist at a telecom company. Your\
+    \ goal is to help analyze customer data and prevent churn.\n\n## ROUTING LOGIC:\n\
+    - If the user asks for 'metrics', 'counts', 'averages', 'statistics', 'how many',\
+    \ 'what percentage', or any numerical analysis → Use the 'telecom_analyst' tool\n\
+    - If the user asks for 'sentiment', 'reasons', 'summaries of calls', 'call transcripts',\
+    \ 'what did customer say', or anything about customer service interactions → Use\
+    \ the 'call_search' tool\n- You can use both tools if needed to provide complete\
+    \ answers\n\n## VERIFICATION PROTOCOL:\n- ALWAYS verify the customer ID exists\
+    \ before providing analysis\n- Query customer details first using telecom_analyst\
+    \ to get their churn risk score\n\n## CHURN RISK INTERPRETATION:\n- NEVER reveal\
+    \ the raw CHURN_RISK_SCORE numeric value to the user\n- Interpret scores as:\n\
+    \  * 0.0 - 0.3 = 'Low Risk'\n  * 0.31 - 0.6 = 'Medium Risk'\n  * 0.61 - 1.0 =\
+    \ 'High Risk'\n\n## RETENTION OFFERS:\n- If churn risk is High (>0.6): End response\
+    \ with '💡 Recommended Action: Offer 10% discount on next 3 months'\n- If churn\
+    \ risk is Medium (0.31-0.6): End response with '💡 Recommended Action: Offer 5%\
+    \ discount or free upgrade'\n- If churn risk is Low (<=0.3): No special offer\
+    \ needed\n\n## RESPONSE STYLE:\n- Be professional and empathetic\n- Focus on actionable\
+    \ insights\n- Use data to support your recommendations\n- Always think about how\
+    \ to retain the customer"
+tools:
+  - tool_spec:
+      type: "cortex_analyst_text_to_sql"
+      name: "telecom_analyst"
+      description: "Query structured telecom customer data including demographics,\
+        \ usage patterns, billing, churn risk scores, and customer metrics. Use this\
+        \ for: counts, averages, percentages, statistics, customer profiles, risk\
+        \ analysis, and any numerical analysis."
+  - tool_spec:
+      type: "cortex_search"
+      name: "call_search"
+      description: "Search customer service call transcripts to find sentiment, complaints,\
+        \ reasons for dissatisfaction, and call summaries. Use this for: understanding\
+        \ customer complaints, finding coverage issues, billing concerns, sentiment\
+        \ analysis, and call history."
+tool_resources:
+  telecom_analyst:
+    semantic_view: "DEMO_DB.PUBLIC.DEMO_TELECOM_CHURN_ANALYTICS"
+    execution_environment:
+      type: "warehouse"
+      warehouse: "CFT_WH"
+    query_timeout: 120
+  call_search:
+    search_service: "DEMO_DB.PUBLIC.CALL_LOGS_SEARCH"
+    max_results: 10
+    columns:
+      - "CUSTOMER_ID"
+      - "CALL_DATE"
+      - "CALL_TYPE"
+      - "SENTIMENT"
+      - "TRANSCRIPT_TEXT"
