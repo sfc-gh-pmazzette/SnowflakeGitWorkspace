@@ -10,6 +10,8 @@ instructions:
   sample_questions:
     - question: "Which 5 nations have the highest revenue?"
     - question: "What is the average order value by market segment?"
+    - question: "How many orders were placed in 1997?"     # v1.0
+
 tools:
   - tool_spec:
       type: cortex_analyst_text_to_sql
