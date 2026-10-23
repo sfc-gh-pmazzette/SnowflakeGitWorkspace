@@ -1,0 +1,13 @@
+# Smoke tests for SALES_AGENT (TPCH_SF1 facts, stable sample data).
+# Used manually by poc/sql/30_test_qa.sql. Could feed a native evaluation later
+# (INPUT_QUERY / EXPECTED_OUTPUT.ground_truth_output).
+- question: "Which nation has the highest total revenue?"
+  expected: "France, about $9.32B"
+- question: "How many orders are there in total?"
+  expected: "1,500,000 orders"
+- question: "How many customer market segments are there?"
+  expected: "5 (AUTOMOBILE, BUILDING, FURNITURE, HOUSEHOLD, MACHINERY)"
+- question: "What date range do the orders cover?"
+  expected: "1992-01-01 to 1998-08-02"
+- question: "Which 5 nations have the highest revenue?"
+  expected: "France, Indonesia, Russia, Mozambique, Jordan (each about $9.2-9.3B)"

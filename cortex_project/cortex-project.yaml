@@ -15,3 +15,8 @@ artifacts:
     targets:
       default:
         object: COCO_HR_ANALYTICS.PUBLIC.TALENT_ACQUISITION_AGENT
+  - path: SALES_AGENT_POC.agent.yaml
+    type: cortex_agent
+    targets:
+      default:
+        object: AGENT_POC_DEV.SALES.SALES_AGENT
