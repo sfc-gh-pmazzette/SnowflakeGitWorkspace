@@ -95,8 +95,8 @@ LANGUAGE PYTHON
 RUNTIME_VERSION = '3.11'
 PACKAGES = ('snowflake-snowpark-python')
 HANDLER = 'run'
-EXECUTE AS CALLER
 COMMENT = 'Agent POC - render DEV spec at a Git tag for an environment, import as a frozen version, move alias'
+EXECUTE AS CALLER
 AS
 $$
 import io
