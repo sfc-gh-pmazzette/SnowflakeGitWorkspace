@@ -200,13 +200,29 @@ def run(session, agent_name, git_tag, target_env, alias_name, set_default, spec_
             if version:
                 action = "REUSED"
             else:
-                session.sql(
-                    f"ALTER AGENT {fqn} ADD VERSION FROM {release_dir} COMMENT = '{comment}'"
-                ).collect()
+                # ADD VERSION FROM is rejected while a LIVE version exists ("There is already a live
+                # version. Please commit it first."). CREATE AGENT always leaves one behind, so the
+                # first import after creation goes through LIVE instead: set the rendered spec on
+                # LIVE and COMMIT it. That still gives exactly one version per tag and removes LIVE,
+                # so later releases use ADD VERSION FROM directly.
+                has_live = any(not v.get("name") for v in _versions(session, fqn))
+                if has_live:
+                    dq = "$" * 2   # dollar-quote built at runtime: a literal one would end this procedure body
+                    if dq in spec:
+                        raise ValueError("Spec contains a dollar-quote and can't be inlined into MODIFY LIVE VERSION")
+                    session.sql(
+                        f"ALTER AGENT {fqn} MODIFY LIVE VERSION SET SPECIFICATION = {dq}{spec}{dq}"
+                    ).collect()
+                    session.sql(f"ALTER AGENT {fqn} COMMIT COMMENT = '{comment}'").collect()
+                    action = "IMPORTED_VIA_LIVE"
+                else:
+                    session.sql(
+                        f"ALTER AGENT {fqn} ADD VERSION FROM {release_dir} COMMENT = '{comment}'"
+                    ).collect()
+                    action = "IMPORTED"
                 version = _version_for_comment(session, fqn, comment)
                 if not version:
-                    raise RuntimeError(f"ADD VERSION succeeded but no version has comment '{comment}'")
-                action = "IMPORTED"
+                    raise RuntimeError(f"Import succeeded but no version has comment '{comment}'")
 
         # 6. Move the alias (unset it on the previous holder if Snowflake refuses a duplicate)
         current = {v.get("name"): (v.get("alias") or "") for v in _versions(session, fqn)}

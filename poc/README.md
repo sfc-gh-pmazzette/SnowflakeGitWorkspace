@@ -99,6 +99,8 @@ Run `99`, then make the repo private again.
 
 If something fails, the error is in the `CALL` result and in `AGENT_POC_OPS.RELEASE.RELEASE_LOG` (`STATUS = 'FAILED'`).
 
+**Confirmed during the POC:** `ADD VERSION FROM` is rejected while the agent has a LIVE version (`099106: There is already a live version. Please commit it first.`), and `CREATE AGENT … FROM @stage` always leaves a LIVE version. So the first release after creation goes through LIVE: `MODIFY LIVE VERSION SET SPECIFICATION` with the rendered spec, then `COMMIT COMMENT = 'git <tag>'` (logged as `IMPORTED_VIA_LIVE`). That removes LIVE, so later releases use `ADD VERSION FROM` (`IMPORTED`). Nobody should run `ADD LIVE VERSION` on QA or PRD agents.
+
 ## Moving to PRD
 - Add a `PRD` row to `ENVIRONMENTS`, plus its rows in `ENV_MAPPING` (database and warehouse names).
 - Use Option B in `02` (private repo, read-only token) and a dedicated service user.
