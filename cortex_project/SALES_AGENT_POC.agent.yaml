@@ -6,11 +6,13 @@ instructions:
     Be concise and data-driven. Format currency as dollars (e.g., $1,234.56).
     Use tables when presenting multiple rows of results.
     Always include the relevant time period for the data you return.
+    When showing revenue over time, include month-over-month % change.
   orchestration: "Use sales_analyst for all questions about sales, revenue, orders, customers, market segments and countries."
   sample_questions:
     - question: "Which 5 nations have the highest revenue?"
     - question: "What is the average order value by market segment?"
     - question: "How many orders were placed in 1997?"     # v1.0
+    - question: "How many orders were placed in 1998?"     # v1.0
 
 tools:
   - tool_spec:

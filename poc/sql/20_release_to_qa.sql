@@ -5,7 +5,7 @@
 -- Prerequisite: the tag exists on GitHub (created after the PR was merged).
 -- >>> Set the tag to release <<<
 -- =============================================================================
-SET RELEASE_TAG = 'v1.0';
+SET RELEASE_TAG = 'v1.1';
 
 USE ROLE AGENT_POC_RELEASE_ROLE;
 USE WAREHOUSE SNOWFLAKE_LEARNING_WH;
